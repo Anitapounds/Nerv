@@ -1,11 +1,11 @@
 import CosmicClash from "../cosmic-clash/page";
 
 interface GamePageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
-export default function GamePage({ params }: GamePageProps) {
-  const { slug } = params;
+export default async function GamePage({ params }: GamePageProps) {
+  const { slug } = await params;
 
   // Simple conditional rendering (you can expand this later)
   if (slug === "cosmic-clash") {
