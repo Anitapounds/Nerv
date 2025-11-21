@@ -170,10 +170,6 @@ export default function RegisterGamePage() {
 
       const result = await signAndExecuteTransaction({
         transaction: tx,
-        options: {
-          showEffects: true,
-          showObjectChanges: true,
-        },
       });
 
       setCurrentStep("Confirming transaction...");
