@@ -1,8 +1,8 @@
 "use client";
 
-import { ComponentPropsWithoutRef, ElementType, forwardRef } from "react";
+import React, { ComponentPropsWithoutRef, ElementType, forwardRef } from "react";
 
-type IntrinsicElement = keyof JSX.IntrinsicElements;
+type IntrinsicElement = keyof React.JSX.IntrinsicElements;
 
 // Animation props that should be filtered out
 const animationProps = [
