@@ -2,8 +2,6 @@
 import { useState } from 'react'
 import { X } from 'lucide-react'
 import Image from 'next/image'
-import ProfileImage from "../../public/avatar/profile.jpg";
-
 
 export default function TipModal({ onClose, onSend }: { onClose: () => void; onSend: (amount: number) => void }) {
   const [amount, setAmount] = useState<number | "">("");
@@ -17,8 +15,10 @@ export default function TipModal({ onClose, onSend }: { onClose: () => void; onS
         <div className='h-15 bg-gray-800 rounded-md'>
           <div className='text-sm flex m-2 p-2 py-3 gap-1'>
             <Image
-              src={ProfileImage}
+              src="/avatar/profile.jpg"
               alt="Profile"
+              width={36}
+              height={36}
               className="w-9 h-9 rounded-full bg-white p-1"
             />
             <div className='text-xs'>

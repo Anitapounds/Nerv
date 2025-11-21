@@ -2,7 +2,6 @@
 
 import { Search } from "lucide-react";
 import Image from "next/image";
-import ProfileImage from "../../public/avatar/profile.jpg";
 import Link from "next/link";
 import WalletConnectButton from "./WalletConnectButton";
 
@@ -48,8 +47,10 @@ export default function Navbar() {
             className="hover:text-gray-600 rounded-full bg-white space-x-4"
           >
             <Image
-              src={ProfileImage}
+              src="/avatar/profile.jpg"
               alt="Profile"
+              width={48}
+              height={48}
               className="w-12 h-12 rounded-full bg-white p-1"
             />
           </Link>
