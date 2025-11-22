@@ -25,12 +25,16 @@ export default function OngoingLivePage() {
   return (
     <div className="min-h-screen bg-black px-15 py-6 relative pt-30">
       {/* Heading */}
-      
-        <Link href="/dashboard" className="text-gray-400 text-sm hover:text-white">
-          ←
-        </Link>
-        <h1 className="text-2xl text-white font-fancy mb-10 mt-7">Ongoing Live</h1>
-      
+
+      <Link
+        href="/dashboard"
+        className="text-gray-400 text-sm hover:text-white"
+      >
+        ←
+      </Link>
+      <h1 className="text-2xl text-white font-fancy mb-10 mt-7">
+        Ongoing Live
+      </h1>
 
       {/* Live Cards */}
       <div className="flex flex-col gap-8">
@@ -62,7 +66,7 @@ export default function OngoingLivePage() {
                 />
 
                 {/* Live tag */}
-                <span className="absolute bottom-3 left-3 bg-purple-700 text-white text-xs px-3 py-1 rounded-md">
+                <span className="absolute bottom-3 left-3 bg-indigo-600 text-white text-xs px-3 py-1 rounded-md">
                   Live
                 </span>
 
