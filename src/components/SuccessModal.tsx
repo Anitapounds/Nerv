@@ -46,7 +46,7 @@ export default function SuccessModal({
 
       {/* Modal */}
       <div
-        className={`relative bg-gradient-to-br from-zinc-900 to-black border border-purple-500/30 rounded-2xl p-8 max-w-md w-full shadow-2xl transition-all duration-300 ${
+        className={`relative bg-gradient-to-br from-zinc-900 to-black border border-indigo-500/30 rounded-2xl p-8 max-w-md w-full shadow-2xl transition-all duration-300 ${
           isAnimating
             ? "opacity-100 scale-100 translate-y-0"
             : "opacity-0 scale-95 translate-y-4"
@@ -87,7 +87,7 @@ export default function SuccessModal({
         <div className="bg-black/50 rounded-lg p-4 mb-6 border border-zinc-800">
           <p className="text-xs text-gray-500 mb-2">Transaction Hash</p>
           <div className="flex items-center gap-2">
-            <code className="text-sm text-purple-400 break-all flex-1">
+            <code className="text-sm text-indigo-400 break-all flex-1">
               {transactionHash}
             </code>
             <button
@@ -149,7 +149,7 @@ export default function SuccessModal({
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="w-full py-3 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold transition-all duration-200 transform hover:scale-105"
+          className="w-full py-3 rounded-lg bg-gradient-to-r from-indigo-600 to-pink-600 hover:from-indigo-700 hover:to-pink-700 text-white font-semibold transition-all duration-200 transform hover:scale-105"
         >
           Continue to Discovery
         </button>

@@ -43,7 +43,9 @@ export default function ProfilePage() {
       <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-10">
         {/* Left: Profile Section */}
         <div className="md:col-span-2">
-          <button className="text-gray-400 text-sm mb-6 hover:text-white">&larr; Back</button>
+          <button className="text-gray-400 text-sm mb-6 hover:text-white">
+            &larr; Back
+          </button>
 
           <div className="flex flex-col md:flex-row items-center md:items-start gap-6 mb-10">
             <Image
@@ -61,34 +63,32 @@ export default function ProfilePage() {
               <div className="mt-4 flex items-center gap-3">
                 <p className="text-gray-300">My Stats</p>
                 <div className="border border-gray-500 rounded-full mb-2">
-                    <div className="text-white px-2 py-1 text-sm">
-                    Connect X
-                    </div>
+                  <div className="text-white px-2 py-1 text-sm">Connect X</div>
                 </div>
               </div>
               {/* Stats Boxes */}
               <div className="grid grid-cols-3 gap-2 mb-5 w-120">
                 <div className="bg-neutral-900 p-4 text-center">
-                    <p className="text-gray-400 text-sm">Xp</p>
-                    <p className="text-lg font-semibold">12,500</p>
+                  <p className="text-gray-400 text-sm">Xp</p>
+                  <p className="text-lg font-semibold">12,500</p>
                 </div>
                 <div className="bg-neutral-900 p-4 text-center">
-                    <p className="text-gray-400 text-sm">Badges</p>
-                    <p className="text-lg font-semibold">7</p>
+                  <p className="text-gray-400 text-sm">Badges</p>
+                  <p className="text-lg font-semibold">7</p>
                 </div>
                 <div className="bg-neutral-900 p-4 text-center">
-                    <p className="text-gray-400 text-sm">Leaderboard rank</p>
-                    <p className="text-lg font-semibold">#254</p>
+                  <p className="text-gray-400 text-sm">Leaderboard rank</p>
+                  <p className="text-lg font-semibold">#254</p>
                 </div>
               </div>
             </div>
           </div>
 
-          
-
           {/* Games Section */}
           <div>
-            <h3 className="text-2xl font-semibold mb-4 uppercase">Games I’m Testing</h3>
+            <h3 className="text-2xl font-semibold mb-4 uppercase">
+              Games I’m Testing
+            </h3>
 
             <div className="space-y-4">
               {games.map((game, i) => (
@@ -108,7 +108,9 @@ export default function ProfilePage() {
                   />
                   <div className="flex-1">
                     <h4 className="font-semibold">{game.title}</h4>
-                    <p className="text-gray-400 text-sm mb-2">Progress {game.progress}%</p>
+                    <p className="text-gray-400 text-sm mb-2">
+                      Progress {game.progress}%
+                    </p>
                     <div className="w-full bg-gray-700 h-2 rounded-full">
                       <div
                         className="bg-blue-500 h-2 rounded-full"
@@ -135,7 +137,7 @@ export default function ProfilePage() {
                 transition={{ delay: i * 0.1 }}
                 className="bg-neutral-900 rounded-xl p-4 flex gap-3 items-start"
               >
-                <div className="bg-purple-600 p-2 rounded-lg">
+                <div className="bg-indigo-600 p-2 rounded-lg">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-4 w-4 text-white"

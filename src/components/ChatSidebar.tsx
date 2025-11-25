@@ -1,6 +1,6 @@
-'use client'
-import { X } from 'lucide-react'
-import { useState } from 'react'
+"use client";
+import { X } from "lucide-react";
+import { useState } from "react";
 
 export default function ChatSidebar({ onClose }: { onClose: () => void }) {
   const [messages, setMessages] = useState<string[]>([
@@ -40,7 +40,7 @@ export default function ChatSidebar({ onClose }: { onClose: () => void }) {
           placeholder="Type a message..."
           onKeyDown={(e) => e.key === "Enter" && send()}
         />
-        <button onClick={send} className="bg-purple-600 px-3 rounded text-sm">
+        <button onClick={send} className="bg-indigo-600 px-3 rounded text-sm">
           Send
         </button>
       </div>

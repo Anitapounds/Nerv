@@ -2,15 +2,24 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useCurrentAccount, useSignAndExecuteTransaction } from "@onelabs/dapp-kit";
-import { createSubmitProjectTransaction, uploadMetadataToIPFS, getContractConfig, isContractConfigured } from "@/lib/gameRegistry";
+import {
+  useCurrentAccount,
+  useSignAndExecuteTransaction,
+} from "@onelabs/dapp-kit";
+import {
+  createSubmitProjectTransaction,
+  uploadMetadataToIPFS,
+  getContractConfig,
+  isContractConfigured,
+} from "@/lib/gameRegistry";
 import Toast, { ToastType } from "@/components/Toast";
 import SuccessModal from "@/components/SuccessModal";
 
 export default function DeveloperSupportPage() {
   const router = useRouter();
   const currentAccount = useCurrentAccount();
-  const { mutateAsync: signAndExecuteTransaction } = useSignAndExecuteTransaction();
+  const { mutateAsync: signAndExecuteTransaction } =
+    useSignAndExecuteTransaction();
 
   const [formData, setFormData] = useState({
     projectName: "",
@@ -90,7 +99,10 @@ export default function DeveloperSupportPage() {
 
     // Check contract configuration
     if (!isConfigured) {
-      showToast("Smart contract not configured. Please deploy the contract first.", "error");
+      showToast(
+        "Smart contract not configured. Please deploy the contract first.",
+        "error"
+      );
       return;
     }
 
@@ -166,12 +178,16 @@ export default function DeveloperSupportPage() {
 
       // Provide more helpful error messages
       if (errorMsg.includes("Insufficient")) {
-        errorMsg = "Insufficient OCT balance. Please ensure you have at least 0.05 OCT plus gas fees.";
+        errorMsg =
+          "Insufficient OCT balance. Please ensure you have at least 0.05 OCT plus gas fees.";
       } else if (errorMsg.includes("User rejected")) {
         errorMsg = "Transaction cancelled by user.";
       }
 
-      showToast(errorMsg + "\n\nPlease check the browser console for more details.", "error");
+      showToast(
+        errorMsg + "\n\nPlease check the browser console for more details.",
+        "error"
+      );
       setCurrentStep("");
     } finally {
       setIsUploading(false);
@@ -197,12 +213,11 @@ export default function DeveloperSupportPage() {
       <div className="min-h-screen bg-black text-white px-6 md:px-12 py-16 pt-32">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
-          <h1 className="text-4xl mb-2 font-fancy">
-            Developer Support Hub
-          </h1>
+          <h1 className="text-4xl mb-2 font-fancy">Developer Support Hub</h1>
           <div className="flex items-center gap-4 mb-10">
             <p className="text-gray-400">
-              Get the support you need to build, launch, and scale the next Web3 game. Fee: {contractConfig.projectFeeInOCT} OCT
+              Get the support you need to build, launch, and scale the next Web3
+              game. Fee: {contractConfig.projectFeeInOCT} OCT
             </p>
             {currentAccount && (
               <p className="text-sm text-green-500">✓ Wallet Connected</p>
@@ -238,7 +253,9 @@ export default function DeveloperSupportPage() {
 
             {/* Description */}
             <div>
-              <label className="block text-sm mb-2">Game / dApp Description *</label>
+              <label className="block text-sm mb-2">
+                Game / dApp Description *
+              </label>
               <textarea
                 name="description"
                 value={formData.description}
@@ -252,7 +269,9 @@ export default function DeveloperSupportPage() {
 
             {/* Development stage */}
             <div>
-              <label className="block text-sm mb-3">Current development stage *</label>
+              <label className="block text-sm mb-3">
+                Current development stage *
+              </label>
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   {["Concept", "Prototype", "Alpha", "Beta", "Launched"].map(
@@ -274,7 +293,9 @@ export default function DeveloperSupportPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm mb-2">Release date (Optional)</label>
+                  <label className="block text-sm mb-2">
+                    Release date (Optional)
+                  </label>
                   <input
                     type="date"
                     name="releaseDate"
@@ -288,30 +309,38 @@ export default function DeveloperSupportPage() {
 
             {/* Type of support */}
             <div>
-              <label className="block text-sm mb-3">Type of support needed</label>
+              <label className="block text-sm mb-3">
+                Type of support needed
+              </label>
               <div className="flex flex-wrap gap-4">
-                {["Funding", "Playtesting", "Marketing", "Technical advice", "Community building"].map(
-                  (type) => (
-                    <button
-                      type="button"
-                      key={type}
-                      onClick={() => handleSupportTypeToggle(type)}
-                      className={`px-4 py-2 rounded-full border ${
-                        formData.supportTypes.includes(type)
-                          ? "border-blue-500 text-blue-400"
-                          : "border-neutral-700 text-gray-400 hover:border-gray-500"
-                      } transition`}
-                    >
-                      {type}
-                    </button>
-                  )
-                )}
+                {[
+                  "Funding",
+                  "Playtesting",
+                  "Marketing",
+                  "Technical advice",
+                  "Community building",
+                ].map((type) => (
+                  <button
+                    type="button"
+                    key={type}
+                    onClick={() => handleSupportTypeToggle(type)}
+                    className={`px-4 py-2 rounded-full border ${
+                      formData.supportTypes.includes(type)
+                        ? "border-blue-500 text-blue-400"
+                        : "border-neutral-700 text-gray-400 hover:border-gray-500"
+                    } transition`}
+                  >
+                    {type}
+                  </button>
+                ))}
               </div>
             </div>
 
             {/* Raised Money */}
             <div>
-              <label className="block text-sm mb-3">Previously raised money?</label>
+              <label className="block text-sm mb-3">
+                Previously raised money?
+              </label>
               <div className="flex gap-6">
                 {["Yes", "No"].map((option) => (
                   <label
@@ -338,7 +367,9 @@ export default function DeveloperSupportPage() {
 
             {/* Assistance */}
             <div>
-              <label className="block text-sm mb-2">Specific Assistance needed</label>
+              <label className="block text-sm mb-2">
+                Specific Assistance needed
+              </label>
               <textarea
                 name="assistance"
                 value={formData.assistance}
@@ -351,14 +382,16 @@ export default function DeveloperSupportPage() {
 
             {/* Upload Progress */}
             {isUploading && (
-              <div className="bg-zinc-900 p-4 rounded-md border border-purple-600">
+              <div className="bg-zinc-900 p-4 rounded-md border border-indigo-600">
                 <div className="flex justify-between mb-2">
-                  <span className="text-sm">{currentStep || "Processing..."}</span>
+                  <span className="text-sm">
+                    {currentStep || "Processing..."}
+                  </span>
                   <span className="text-sm">{uploadProgress}%</span>
                 </div>
                 <div className="w-full bg-zinc-700 rounded-full h-2">
                   <div
-                    className="bg-purple-600 h-2 rounded-full transition-all"
+                    className="bg-indigo-600 h-2 rounded-full transition-all"
                     style={{ width: `${uploadProgress}%` }}
                   ></div>
                 </div>

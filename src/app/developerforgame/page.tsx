@@ -2,17 +2,26 @@
 
 import { useState } from "react";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/navigation";
-import { useCurrentAccount, useSignAndExecuteTransaction } from "@onelabs/dapp-kit";
-import { createSubmitGameTransaction, uploadMetadataToIPFS, getContractConfig, isContractConfigured } from "@/lib/gameRegistry";
+import {
+  useCurrentAccount,
+  useSignAndExecuteTransaction,
+} from "@onelabs/dapp-kit";
+import {
+  createSubmitGameTransaction,
+  uploadMetadataToIPFS,
+  getContractConfig,
+  isContractConfigured,
+} from "@/lib/gameRegistry";
 import Toast, { ToastType } from "@/components/Toast";
 import SuccessModal from "@/components/SuccessModal";
 
 export default function RegisterGamePage() {
   const router = useRouter();
   const currentAccount = useCurrentAccount();
-  const { mutateAsync: signAndExecuteTransaction } = useSignAndExecuteTransaction();
+  const { mutateAsync: signAndExecuteTransaction } =
+    useSignAndExecuteTransaction();
 
   const [video, setVideo] = useState<File | null>(null);
   const [logo, setLogo] = useState<File | null>(null);
@@ -81,7 +90,9 @@ export default function RegisterGamePage() {
     if (file) setLogo(file);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -128,7 +139,10 @@ export default function RegisterGamePage() {
 
     // Check contract configuration
     if (!isConfigured) {
-      showToast("Smart contract not configured. Please deploy the contract first.", "error");
+      showToast(
+        "Smart contract not configured. Please deploy the contract first.",
+        "error"
+      );
       return;
     }
 
@@ -137,7 +151,12 @@ export default function RegisterGamePage() {
       return;
     }
 
-    if (!formData.gameName || !formData.genre || !formData.description || !formData.websiteUrl) {
+    if (
+      !formData.gameName ||
+      !formData.genre ||
+      !formData.description ||
+      !formData.websiteUrl
+    ) {
       showToast("Please fill in all required fields", "warning");
       return;
     }
@@ -209,7 +228,9 @@ export default function RegisterGamePage() {
         title: formData.gameName,
         image: logoUrl,
       };
-      const existingGames = JSON.parse(localStorage.getItem("submittedGames") || "[]");
+      const existingGames = JSON.parse(
+        localStorage.getItem("submittedGames") || "[]"
+      );
       existingGames.push(gameData);
       localStorage.setItem("submittedGames", JSON.stringify(existingGames));
 
@@ -236,12 +257,16 @@ export default function RegisterGamePage() {
 
       // Provide more helpful error messages
       if (errorMsg.includes("Insufficient")) {
-        errorMsg = "Insufficient OCT balance. Please ensure you have at least 0.1 OCT plus gas fees.";
+        errorMsg =
+          "Insufficient OCT balance. Please ensure you have at least 0.1 OCT plus gas fees.";
       } else if (errorMsg.includes("User rejected")) {
         errorMsg = "Transaction cancelled by user.";
       }
 
-      showToast(errorMsg + "\n\nPlease check the browser console for more details.", "error");
+      showToast(
+        errorMsg + "\n\nPlease check the browser console for more details.",
+        "error"
+      );
       setCurrentStep("");
     } finally {
       setIsUploading(false);
@@ -266,224 +291,239 @@ export default function RegisterGamePage() {
       />
       <section className="min-h-screen bg-black text-white px-6 md:px-20 py-16 pt-32">
         <div className="mb-6">
-        <h1 className="font-fancy text-4xl mb-2">Register Your Game</h1>
-        <div className="flex items-center gap-4">
-          <p className="text-gray-400">
-            Submit your game to our platform. Fee: {contractConfig.gameFeeInOCT} OCT
-          </p>
-          {currentAccount && (
-            <p className="text-sm text-green-500">✓ Wallet Connected</p>
-          )}
-          {!isConfigured && (
-            <p className="text-sm text-yellow-500">⚠ Contract not deployed</p>
-          )}
-        </div>
-      </div>
-
-      {!currentAccount && (
-        <div className="bg-yellow-900/30 border border-yellow-600 rounded-md p-4 mb-6">
-          <p className="text-yellow-400 text-sm">
-            Please connect your OneChain wallet to submit a game.
-          </p>
-        </div>
-      )}
-
-      <form className="space-y-8" onSubmit={handleSubmit}>
-        {/* Name + Genre */}
-        <div className="grid md:grid-cols-2 gap-6">
-          <div>
-            <label className="block mb-2 text-sm">Game Name *</label>
-            <input
-              type="text"
-              name="gameName"
-              placeholder="Game Clash"
-              value={formData.gameName}
-              onChange={handleInputChange}
-              required
-              className="w-full rounded-md bg-zinc-900 border border-zinc-700 px-4 py-3 outline-none"
-            />
-          </div>
-          <div>
-            <label className="block mb-2 text-sm">Genre *</label>
-            <input
-              type="text"
-              name="genre"
-              placeholder="Combat"
-              value={formData.genre}
-              onChange={handleInputChange}
-              required
-              className="w-full rounded-md bg-zinc-900 border border-zinc-700 px-4 py-3 outline-none"
-            />
-          </div>
-        </div>
-
-        {/* Description */}
-        <div>
-          <label className="block mb-2 text-sm">Description *</label>
-          <textarea
-            name="description"
-            rows={5}
-            placeholder="Tell us about your game..."
-            value={formData.description}
-            onChange={handleInputChange}
-            required
-            className="w-full rounded-md bg-zinc-900 border border-zinc-700 px-4 py-3 outline-none"
-          ></textarea>
-        </div>
-
-        {/* Website URL */}
-        <div>
-          <label className="block mb-2 text-sm">Website/Game URL *</label>
-          <input
-            type="url"
-            name="websiteUrl"
-            placeholder="https://yourgame.com"
-            value={formData.websiteUrl}
-            onChange={handleInputChange}
-            required
-            className="w-full rounded-md bg-zinc-900 border border-zinc-700 px-4 py-3 outline-none"
-          />
-          <p className="text-xs text-gray-500 mt-1">
-            This URL will be used when players click &quot;Join Test&quot;
-          </p>
-        </div>
-
-        {/* Platform + Release date */}
-        <div className="grid md:grid-cols-2 gap-6">
-          <div>
-            <label className="block mb-2 text-sm">Platform</label>
-            <div className="space-y-2">
-              {["Pc", "Mobile", "Mac", "Linux"].map((platform) => (
-                <label key={platform} className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    checked={formData.platforms.includes(platform)}
-                    onChange={() => handlePlatformChange(platform)}
-                    className="accent-purple-600"
-                  />
-                  <span>{platform}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <label className="block mb-2 text-sm">Release date</label>
-            <input
-              type="date"
-              name="releaseDate"
-              value={formData.releaseDate}
-              onChange={handleInputChange}
-              className="w-full rounded-md bg-zinc-900 border border-zinc-700 px-4 py-3 outline-none"
-            />
-          </div>
-        </div>
-
-        {/* Game asset upload */}
-        <div>
-          <label className="block mb-2 text-sm">Game asset</label>
-          {video ? (
-            <div>
-              <video
-                src={URL.createObjectURL(video)}
-                className="w-32 rounded-md mb-2"
-                controls
-              />
-              <button
-                type="button"
-                onClick={() => setVideo(null)}
-                className="text-red-500 text-sm"
-              >
-                Remove Video
-              </button>
-            </div>
-          ) : (
-            <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-zinc-700 rounded-md cursor-pointer hover:border-purple-500 transition">
-                    <FontAwesomeIcon icon={faHeart} />
-              <p className="text-gray-400 text-sm">
-                Drag and drop your file here or <span className="text-purple-500">browse</span>
-              </p>
-              <input type="file" accept="video/*" className="hidden" onChange={handleVideoChange} />
-            </label>
-          )}
-        </div>
-
-        {/* Project logo upload */}
-        <div>
-          <label className="block mb-2 text-sm">Project Logo</label>
-          {logo ? (
-            <div>
-              <img
-                src={URL.createObjectURL(logo)}
-                className="w-20 h-20 object-cover rounded-md mb-2"
-                alt="Logo"
-              />
-              <button
-                type="button"
-                onClick={() => setLogo(null)}
-                className="text-red-500 text-sm"
-              >
-                Remove Logo
-              </button>
-            </div>
-          ) : (
-            <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-zinc-700 rounded-md cursor-pointer hover:border-purple-500 transition">
-                    <FontAwesomeIcon icon={faHeart} />
-              <p className="text-gray-400 text-sm">
-                Drag and drop your file here or <span className="text-purple-500">browse</span>
-              </p>
-              <input type="file" accept="image/*" className="hidden" onChange={handleLogoChange} />
-            </label>
-          )}
-        </div>
-
-        {/* Upload Progress */}
-        {isUploading && (
-          <div className="bg-zinc-900 p-4 rounded-md border border-purple-600">
-            <div className="flex justify-between mb-2">
-              <span className="text-sm">{currentStep || "Processing..."}</span>
-              <span className="text-sm">{uploadProgress}%</span>
-            </div>
-            <div className="w-full bg-zinc-700 rounded-full h-2">
-              <div
-                className="bg-purple-600 h-2 rounded-full transition-all"
-                style={{ width: `${uploadProgress}%` }}
-              ></div>
-            </div>
-            {uploadProgress >= 60 && uploadProgress < 80 && (
-              <p className="text-xs text-gray-400 mt-2">
-                Please confirm the transaction in your wallet...
-              </p>
+          <h1 className="font-fancy text-4xl mb-2">Register Your Game</h1>
+          <div className="flex items-center gap-4">
+            <p className="text-gray-400">
+              Submit your game to our platform. Fee:{" "}
+              {contractConfig.gameFeeInOCT} OCT
+            </p>
+            {currentAccount && (
+              <p className="text-sm text-green-500">✓ Wallet Connected</p>
             )}
+            {!isConfigured && (
+              <p className="text-sm text-yellow-500">⚠ Contract not deployed</p>
+            )}
+          </div>
+        </div>
+
+        {!currentAccount && (
+          <div className="bg-yellow-900/30 border border-yellow-600 rounded-md p-4 mb-6">
+            <p className="text-yellow-400 text-sm">
+              Please connect your OneChain wallet to submit a game.
+            </p>
           </div>
         )}
 
-        {/* Buttons */}
-        <div className="flex justify-end space-x-4">
-          <button
-            type="button"
-            onClick={() => router.back()}
-            disabled={isUploading}
-            className="px-6 py-2 rounded-md bg-zinc-700 hover:bg-zinc-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            disabled={isUploading || !currentAccount || !isConfigured}
-            className="px-6 py-2 rounded-md bg-purple-600 hover:bg-purple-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isUploading
-              ? "Processing..."
-              : !currentAccount
-              ? "Connect Wallet to Submit"
-              : !isConfigured
-              ? "Contract Not Deployed"
-              : `Submit (Pay ${contractConfig.gameFeeInOCT} OCT)`}
-          </button>
-        </div>
-      </form>
-    </section>
+        <form className="space-y-8" onSubmit={handleSubmit}>
+          {/* Name + Genre */}
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <label className="block mb-2 text-sm">Game Name *</label>
+              <input
+                type="text"
+                name="gameName"
+                placeholder="Game Clash"
+                value={formData.gameName}
+                onChange={handleInputChange}
+                required
+                className="w-full rounded-md bg-zinc-900 border border-zinc-700 px-4 py-3 outline-none"
+              />
+            </div>
+            <div>
+              <label className="block mb-2 text-sm">Genre *</label>
+              <input
+                type="text"
+                name="genre"
+                placeholder="Combat"
+                value={formData.genre}
+                onChange={handleInputChange}
+                required
+                className="w-full rounded-md bg-zinc-900 border border-zinc-700 px-4 py-3 outline-none"
+              />
+            </div>
+          </div>
+
+          {/* Description */}
+          <div>
+            <label className="block mb-2 text-sm">Description *</label>
+            <textarea
+              name="description"
+              rows={5}
+              placeholder="Tell us about your game..."
+              value={formData.description}
+              onChange={handleInputChange}
+              required
+              className="w-full rounded-md bg-zinc-900 border border-zinc-700 px-4 py-3 outline-none"
+            ></textarea>
+          </div>
+
+          {/* Website URL */}
+          <div>
+            <label className="block mb-2 text-sm">Website/Game URL *</label>
+            <input
+              type="url"
+              name="websiteUrl"
+              placeholder="https://yourgame.com"
+              value={formData.websiteUrl}
+              onChange={handleInputChange}
+              required
+              className="w-full rounded-md bg-zinc-900 border border-zinc-700 px-4 py-3 outline-none"
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              This URL will be used when players click &quot;Join Test&quot;
+            </p>
+          </div>
+
+          {/* Platform + Release date */}
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <label className="block mb-2 text-sm">Platform</label>
+              <div className="space-y-2">
+                {["Pc", "Mobile", "Mac", "Linux"].map((platform) => (
+                  <label key={platform} className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      checked={formData.platforms.includes(platform)}
+                      onChange={() => handlePlatformChange(platform)}
+                      className="accent-indigo-600"
+                    />
+                    <span>{platform}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <label className="block mb-2 text-sm">Release date</label>
+              <input
+                type="date"
+                name="releaseDate"
+                value={formData.releaseDate}
+                onChange={handleInputChange}
+                className="w-full rounded-md bg-zinc-900 border border-zinc-700 px-4 py-3 outline-none"
+              />
+            </div>
+          </div>
+
+          {/* Game asset upload */}
+          <div>
+            <label className="block mb-2 text-sm">Game asset</label>
+            {video ? (
+              <div>
+                <video
+                  src={URL.createObjectURL(video)}
+                  className="w-32 rounded-md mb-2"
+                  controls
+                />
+                <button
+                  type="button"
+                  onClick={() => setVideo(null)}
+                  className="text-red-500 text-sm"
+                >
+                  Remove Video
+                </button>
+              </div>
+            ) : (
+              <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-zinc-700 rounded-md cursor-pointer hover:border-indigo-500 transition">
+                <FontAwesomeIcon icon={faHeart} />
+                <p className="text-gray-400 text-sm">
+                  Drag and drop your file here or{" "}
+                  <span className="text-indigo-500">browse</span>
+                </p>
+                <input
+                  type="file"
+                  accept="video/*"
+                  className="hidden"
+                  onChange={handleVideoChange}
+                />
+              </label>
+            )}
+          </div>
+
+          {/* Project logo upload */}
+          <div>
+            <label className="block mb-2 text-sm">Project Logo</label>
+            {logo ? (
+              <div>
+                <img
+                  src={URL.createObjectURL(logo)}
+                  className="w-20 h-20 object-cover rounded-md mb-2"
+                  alt="Logo"
+                />
+                <button
+                  type="button"
+                  onClick={() => setLogo(null)}
+                  className="text-red-500 text-sm"
+                >
+                  Remove Logo
+                </button>
+              </div>
+            ) : (
+              <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-zinc-700 rounded-md cursor-pointer hover:border-indigo-500 transition">
+                <FontAwesomeIcon icon={faHeart} />
+                <p className="text-gray-400 text-sm">
+                  Drag and drop your file here or{" "}
+                  <span className="text-indigo-500">browse</span>
+                </p>
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleLogoChange}
+                />
+              </label>
+            )}
+          </div>
+
+          {/* Upload Progress */}
+          {isUploading && (
+            <div className="bg-zinc-900 p-4 rounded-md border border-indigo-600">
+              <div className="flex justify-between mb-2">
+                <span className="text-sm">
+                  {currentStep || "Processing..."}
+                </span>
+                <span className="text-sm">{uploadProgress}%</span>
+              </div>
+              <div className="w-full bg-zinc-700 rounded-full h-2">
+                <div
+                  className="bg-indigo-600 h-2 rounded-full transition-all"
+                  style={{ width: `${uploadProgress}%` }}
+                ></div>
+              </div>
+              {uploadProgress >= 60 && uploadProgress < 80 && (
+                <p className="text-xs text-gray-400 mt-2">
+                  Please confirm the transaction in your wallet...
+                </p>
+              )}
+            </div>
+          )}
+
+          {/* Buttons */}
+          <div className="flex justify-end space-x-4">
+            <button
+              type="button"
+              onClick={() => router.back()}
+              disabled={isUploading}
+              className="px-6 py-2 rounded-md bg-zinc-700 hover:bg-zinc-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={isUploading || !currentAccount || !isConfigured}
+              className="px-6 py-2 rounded-md bg-indigo-600 hover:bg-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isUploading
+                ? "Processing..."
+                : !currentAccount
+                ? "Connect Wallet to Submit"
+                : !isConfigured
+                ? "Contract Not Deployed"
+                : `Submit (Pay ${contractConfig.gameFeeInOCT} OCT)`}
+            </button>
+          </div>
+        </form>
+      </section>
     </>
   );
 }

@@ -84,7 +84,7 @@ export default function OngoingLivePage() {
       {/* Floating + Button */}
       <Link
         href="/ongoing-live/live"
-        className="fixed bottom-8 right-8 bg-purple-700 text-white rounded-full w-12 h-12 flex items-center justify-center text-3xl hover:bg-purple-800 transition"
+        className="fixed bottom-8 right-8 bg-indigo-700 text-white rounded-full w-12 h-12 flex items-center justify-center text-3xl hover:bg-indigo-800 transition"
       >
         +
       </Link>
