@@ -1,29 +1,28 @@
 "use client";
 
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "@/lib/motion";
 import Link from "next/dist/client/link";
 
 export default function HomePage() {
-  
-const games = [
-  {
-    title: "VR Games",
-    image: "/images/homevr1.jpg",
-    discription: "An immersive VR experience that transports players.",
-  },
-  {
-    title: "enter in essport's",
-    image: "/images/homevr2.jpg",
-    discription: "A thrilling multiplayer game where players.",
-  },
-  {
-    title: "console games",
-    image: "/images/homevr3.jpg",
-    discription: "A thrilling multiplayer game where players",
-  },
-];
+  const games = [
+    {
+      title: "VR Games",
+      image: "/images/homevr1.jpg",
+      discription: "An immersive VR experience that transports players.",
+    },
+    {
+      title: "enter in essport's",
+      image: "/images/homevr2.jpg",
+      discription: "A thrilling multiplayer game where players.",
+    },
+    {
+      title: "console games",
+      image: "/images/homevr3.jpg",
+      discription: "A thrilling multiplayer game where players",
+    },
+  ];
 
   return (
     <div
@@ -51,27 +50,40 @@ const games = [
           transition={{ delay: 0.2, duration: 0.7 }}
           className="text-3xl md:text-5xl leading-tight font-heading tracking-wider"
         >
-                    <div className="pt-3">
-            <span className="pl-2 bg-center bg-no-repeat bg-cover"
-            style={{
-              backgroundImage: "url('/images/play-bg.jpg')",
-            }}>Play, Test </span>
+          <div className="pt-3">
+            <span
+              className="pl-2 bg-center bg-no-repeat bg-cover"
+              style={{
+                backgroundImage: "url('/images/play-bg.jpg')",
+              }}
+            >
+              Play, Test{" "}
+            </span>
           </div>
           <span>Rule the Game</span>
         </motion.h1>
 
         <p className="text-white-400 mt-2 max-w-md">
-          Discover early-stage Web3 games. Compete in skill-
-          based tournaments. Earn badges, points, and
-          reputation all on-chain.
+          Discover early-stage Web3 games. Compete in skill- based tournaments.
+          Earn badges, points, and reputation all on-chain.
         </p>
 
         <div className="flex gap-4 mt-4">
           <div className="flex-1 bg-transparent backdrop-blur-xs border border-gray-500 text-center p-2 px-2 lg:p-3 lg:px-3 rounded-xl hover:bg-indigo-700 ">
-            <Link href="#" className="uppercase tracking-wider text-white text-sm">Enter Arena</Link>
+            <Link
+              href="#"
+              className="uppercase tracking-wider text-white text-sm"
+            >
+              Enter Arena
+            </Link>
           </div>
           <div className="flex-1 bg-transparent backdrop-blur-xs border border-gray-500 text-center p-3 rounded-xl hover:bg-indigo-700">
-            <Link href="/developerforgame" className="uppercase tracking-wider text-white text-sm">Add Game</Link>
+            <Link
+              href="/developerforgame"
+              className="uppercase tracking-wider text-white text-sm"
+            >
+              Add Game
+            </Link>
           </div>
         </div>
       </div>
@@ -96,8 +108,14 @@ const games = [
                 />
               </div>
               <div className="px-4 w-50 bottom-4 left-4">
-                <h3 className="text-xs font-semibold uppercase">{game.title}</h3><br />
-                <p className="text-[0.625rem] text-gray-300 uppercase">{game.discription}</p><br />
+                <h3 className="text-xs font-semibold uppercase">
+                  {game.title}
+                </h3>
+                <br />
+                <p className="text-[0.625rem] text-gray-300 uppercase">
+                  {game.discription}
+                </p>
+                <br />
                 <div className="text-[0.625rem] flex justify-between items-center">
                   <div className="flex gap-2">
                     <FontAwesomeIcon icon={faHeart} />
