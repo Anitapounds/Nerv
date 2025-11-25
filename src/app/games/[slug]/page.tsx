@@ -2,11 +2,12 @@
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useParams } from "next/navigation";
 import { fetchMetadataFromIPFS } from "@/lib/gameRegistry";
 import { fetchGamesFromBlockchainClient } from "@/lib/blockchainClient";
 import { useSuiClient } from "@onelabs/dapp-kit";
+import { SuiClient } from "@onelabs/sui/client";
 
 interface GameDetail {
   name: string;
@@ -26,10 +27,21 @@ interface GameDetail {
 export default function GamePage() {
   const params = useParams();
   const slug = params?.slug as string;
-  const suiClient = useSuiClient();
+  const walletClient = useSuiClient();
   const [game, setGame] = useState<GameDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Create a fallback client for read-only operations when wallet isn't connected
+  const suiClient = useMemo(() => {
+    if (walletClient) {
+      return walletClient;
+    }
+    // Create a read-only client for public blockchain queries
+    return new SuiClient({
+      url: "https://rpc-testnet.onelabs.cc:443",
+    });
+  }, [walletClient]);
 
   useEffect(() => {
     const loadGame = async () => {

@@ -2,17 +2,29 @@
 
 import { motion } from "@/lib/motion";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/dist/client/link";
 import { fetchMetadataFromIPFS } from "@/lib/gameRegistry";
 import { fetchGamesFromBlockchainClient } from "@/lib/blockchainClient";
 import { useSuiClient } from "@onelabs/dapp-kit";
+import { SuiClient } from "@onelabs/sui/client";
 
 export default function DiscoveryPlaytest() {
   const [activeCategory, setActiveCategory] = useState("Action");
   const [blockchainGames, setBlockchainGames] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const suiClient = useSuiClient();
+  const walletClient = useSuiClient();
+
+  // Create a fallback client for read-only operations when wallet isn't connected
+  const suiClient = useMemo(() => {
+    if (walletClient) {
+      return walletClient;
+    }
+    // Create a read-only client for public blockchain queries
+    return new SuiClient({
+      url: "https://rpc-testnet.onelabs.cc:443",
+    });
+  }, [walletClient]);
 
   const loadGames = async () => {
     try {
