@@ -5,7 +5,7 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRouter } from "next/navigation";
 import { useCurrentAccount, useSignAndExecuteTransaction } from "@onelabs/dapp-kit";
-import { createSubmitGameTransaction, getContractConfig, isContractConfigured } from "@/lib/gameRegistry";
+import { createSubmitGameTransaction, uploadMetadataToIPFS, getContractConfig, isContractConfigured } from "@/lib/gameRegistry";
 import Toast, { ToastType } from "@/components/Toast";
 import SuccessModal from "@/components/SuccessModal";
 
@@ -52,7 +52,10 @@ export default function RegisterGamePage() {
 
   const handleSuccessModalClose = () => {
     setSuccessModal({ isOpen: false, transactionHash: "", gameName: "" });
-    router.push("/discovery");
+    // Add a small delay to allow blockchain state to propagate
+    setTimeout(() => {
+      router.push("/discovery");
+    }, 1000);
   };
 
   // Form fields
@@ -145,19 +148,18 @@ export default function RegisterGamePage() {
     try {
       // Step 1: Upload logo to Pinata
       setCurrentStep("Uploading logo to IPFS...");
-      setUploadProgress(20);
+      setUploadProgress(15);
       const logoUrl = await uploadToPinata(logo);
 
       // Step 2: Upload video to Pinata
       setCurrentStep("Uploading video to IPFS...");
-      setUploadProgress(40);
+      setUploadProgress(30);
       const videoUrl = await uploadToPinata(video);
 
-      // Step 3: Submit transaction to blockchain
-      setCurrentStep("Processing payment (0.1 OCT)...");
-      setUploadProgress(60);
-
-      const tx = createSubmitGameTransaction({
+      // Step 3: Upload metadata JSON to IPFS
+      setCurrentStep("Uploading metadata to IPFS...");
+      setUploadProgress(45);
+      const metadata = {
         name: formData.gameName,
         description: formData.description,
         genre: formData.genre,
@@ -166,7 +168,18 @@ export default function RegisterGamePage() {
         websiteUrl: formData.websiteUrl,
         logoUrl,
         videoUrl,
-      });
+        status: "Open",
+        xp: "1500 XP",
+        button: "Join Test",
+        createdAt: new Date().toISOString(),
+      };
+      const ipfsHash = await uploadMetadataToIPFS(metadata);
+
+      // Step 4: Submit transaction to blockchain
+      setCurrentStep("Processing payment (0.1 OCT)...");
+      setUploadProgress(60);
+
+      const tx = createSubmitGameTransaction(ipfsHash, formData.gameName);
 
       const result = await signAndExecuteTransaction({
         transaction: tx,
@@ -188,29 +201,17 @@ export default function RegisterGamePage() {
 
       console.log("Transaction succeeded! Digest:", result.digest);
 
-      // Step 4: Save to localStorage
-      setCurrentStep("Saving game data...");
-      const newGame = {
-        id: Date.now().toString(),
-        title: formData.gameName,
-        slug: formData.gameName.toLowerCase().replace(/\s+/g, "-"),
-        description: formData.description,
-        image: logoUrl,
-        video: videoUrl,
-        status: "Open",
-        xp: "1500 XP",
-        button: "Join Test",
-        genre: formData.genre,
-        platforms: formData.platforms,
-        releaseDate: formData.releaseDate,
-        websiteUrl: formData.websiteUrl,
-        createdAt: new Date().toISOString(),
+      // Save to localStorage temporarily (until CORS issue is resolved)
+      const gameData = {
+        ...metadata,
         txDigest: result.digest,
+        slug: formData.gameName.toLowerCase().replace(/\s+/g, "-"),
+        title: formData.gameName,
+        image: logoUrl,
       };
-
-      const existingGames = JSON.parse(localStorage.getItem("userGames") || "[]");
-      existingGames.push(newGame);
-      localStorage.setItem("userGames", JSON.stringify(existingGames));
+      const existingGames = JSON.parse(localStorage.getItem("submittedGames") || "[]");
+      existingGames.push(gameData);
+      localStorage.setItem("submittedGames", JSON.stringify(existingGames));
 
       setUploadProgress(100);
       setCurrentStep("Game registered successfully!");
@@ -268,7 +269,7 @@ export default function RegisterGamePage() {
         <h1 className="font-fancy text-4xl mb-2">Register Your Game</h1>
         <div className="flex items-center gap-4">
           <p className="text-gray-400">
-            Submit your game to our platform. Fee: {contractConfig.feeInOCT} OCT
+            Submit your game to our platform. Fee: {contractConfig.gameFeeInOCT} OCT
           </p>
           {currentAccount && (
             <p className="text-sm text-green-500">✓ Wallet Connected</p>
@@ -478,7 +479,7 @@ export default function RegisterGamePage() {
               ? "Connect Wallet to Submit"
               : !isConfigured
               ? "Contract Not Deployed"
-              : `Submit (Pay ${contractConfig.feeInOCT} OCT)`}
+              : `Submit (Pay ${contractConfig.gameFeeInOCT} OCT)`}
           </button>
         </div>
       </form>

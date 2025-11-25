@@ -51,9 +51,11 @@ const games = [
           transition={{ delay: 0.2, duration: 0.7 }}
           className="text-3xl md:text-5xl leading-tight font-heading tracking-wider"
         >
-          <div className="flex mt-2">
-            <div className="rounded-md w-2 h-8 lg:h-15 md:h-15 bg-gradient-to-b from-gray-300 to-gray-300 mr-1"></div>
-            <span>Play, Test </span>
+                    <div className="pt-3">
+            <span className="pl-2 bg-center bg-no-repeat bg-cover"
+            style={{
+              backgroundImage: "url('/images/play-bg.jpg')",
+            }}>Play, Test </span>
           </div>
           <span>Rule the Game</span>
         </motion.h1>
