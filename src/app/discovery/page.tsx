@@ -253,25 +253,14 @@ export default function DiscoveryPlaytest() {
 
             </div>
             <div className="text-center px-10 pb-15 pt-35">
-              {game.websiteUrl && game.websiteUrl.startsWith("http") ? (
-                <a href={game.websiteUrl} target="_blank" rel="noopener noreferrer">
-                  <Button
-                    variant="primary"
-                    className="hover:bg-gray-200 text-sm"
-                  >
-                    {game.button}
-                  </Button>
-                </a>
-              ) : (
-                <Link href={game.websiteUrl || `/games/${game.slug}`}>
-                  <Button
-                    variant="primary"
-                    className="hover:bg-gray-200 text-sm"
-                  >
-                    {game.button}
-                  </Button>
-                </Link>
-              )}
+              <Link href={`/games/${game.slug}`}>
+                <Button
+                  variant="primary"
+                  className="hover:bg-gray-200 text-sm"
+                >
+                  View Details
+                </Button>
+              </Link>
             </div>
           </motion.div>
             ))

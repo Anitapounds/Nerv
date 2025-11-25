@@ -101,7 +101,13 @@ export async function fetchGamesFromBlockchainClient(suiClient: any): Promise<Bl
     }).filter((game: any) => game !== null);
 
     console.log(`Processed ${processedGames.length} games successfully`);
-    return processedGames;
+
+    // Filter to only show game submissions (submission_type === 0)
+    // submission_type: 0 = games, 1 = developer projects
+    const gameSubmissions = processedGames.filter((game: any) => game.submission_type === 0);
+    console.log(`Filtered to ${gameSubmissions.length} game submissions (excluding developer projects)`);
+
+    return gameSubmissions;
   } catch (error) {
     console.error("Error fetching games (wallet client):", error);
     return [];

@@ -70,7 +70,16 @@ export default function DeveloperSupportPage() {
 
   const handleSuccessModalClose = () => {
     setSuccessModal({ isOpen: false, transactionHash: "", projectName: "" });
-    router.push("/discovery");
+    // Reset form instead of redirecting to discovery
+    setFormData({
+      projectName: "",
+      description: "",
+      stage: "",
+      releaseDate: "",
+      supportTypes: [] as string[],
+      raisedMoney: "",
+      assistance: "",
+    });
   };
 
   const handleChange = (
