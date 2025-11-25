@@ -261,7 +261,7 @@ export default function GamePage() {
 
           {/* Back to Discovery */}
           <Link href="/discovery">
-            <Button variant="outline" className="w-full">
+            <Button variant="secondary" className="w-full">
               ← Back to Discovery
             </Button>
           </Link>
