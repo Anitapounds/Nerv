@@ -25,6 +25,7 @@ export default function RegisterGamePage() {
     useSignAndExecuteTransaction();
 
   const [video, setVideo] = useState<File | null>(null);
+  const [logo, setLogo] = useState<File | null>(null);
   const [files, setFiles] = useState<File[]>([]);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
@@ -89,6 +90,11 @@ export default function RegisterGamePage() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = Array.from(e.target.files || []);
     setFiles(selectedFiles);
+  };
+
+  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) setLogo(file);
   };
 
   const handleInputChange = (

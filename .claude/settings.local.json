@@ -20,7 +20,8 @@
       "Bash(bash:*)",
       "Bash(node fetch-games-direct.js:*)",
       "Bash(nslookup:*)",
-      "Bash(lsof:*)"
+      "Bash(lsof:*)",
+      "Bash(git checkout:*)"
     ],
     "deny": [],
     "ask": []
