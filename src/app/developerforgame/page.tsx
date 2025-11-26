@@ -25,7 +25,7 @@ export default function RegisterGamePage() {
     useSignAndExecuteTransaction();
 
   const [video, setVideo] = useState<File | null>(null);
-  const [logo, setLogo] = useState<File | null>(null);
+  const [files, setFiles] = useState<File[]>([]);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
   const [currentStep, setCurrentStep] = useState<string>("");
@@ -86,9 +86,9 @@ export default function RegisterGamePage() {
     if (file) setVideo(file);
   };
 
-  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) setLogo(file);
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles = Array.from(e.target.files || []);
+    setFiles(selectedFiles);
   };
 
   const handleInputChange = (
@@ -409,19 +409,55 @@ export default function RegisterGamePage() {
           {/* Game asset upload */}
           <div>
             <label className="block mb-2 text-sm">Game asset</label>
+            {files.length > 0 ? (
+              <div className="space-y-3">
+                {files.map((file, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between"
+                  >
+                    <span className="text-gray-300 text-sm">{file.name}</span>
+                    <button
+                      type="button"
+                      className="text-red-500 text-sm"
+                      onClick={() =>
+                        setFiles((prev) => prev.filter((_, i) => i !== index))
+                      }
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-zinc-700 rounded-md cursor-pointer hover:border-indigo-500 transition">
+                <FontAwesomeIcon icon={faCloudArrowUp} />
+                <p className="text-gray-400 text-sm">
+                  Drag and drop your files here or{" "}
+                  <span className="text-indigo-500">browse</span>
+                </p>
+                <input
+                  type="file"
+                  className="hidden"
+                  onChange={handleFileChange}
+                  multiple
+                />
+              </label>
+            )}
+          </div>
+
+          {/* Project logo upload */}
+          <div>
+            <label className="block mb-2 text-sm">Game Logo</label>
             {video ? (
               <div>
-                <video
-                  src={URL.createObjectURL(video)}
-                  className="w-32 rounded-md mb-2"
-                  controls
-                />
+                <span className="text-gray-300 text-sm">{video.name}</span>
                 <button
                   type="button"
                   onClick={() => setVideo(null)}
                   className="text-red-500 text-sm"
                 >
-                  Remove Video
+                  Remove
                 </button>
               </div>
             ) : (
@@ -435,40 +471,6 @@ export default function RegisterGamePage() {
                   type="file"
                   className="hidden"
                   onChange={handleVideoChange}
-                />
-              </label>
-            )}
-          </div>
-
-          {/* Project logo upload */}
-          <div>
-            <label className="block mb-2 text-sm">Project Logo</label>
-            {logo ? (
-              <div>
-                <img
-                  src={URL.createObjectURL(logo)}
-                  className="w-20 h-20 object-cover rounded-md mb-2"
-                  alt="Logo"
-                />
-                <button
-                  type="button"
-                  onClick={() => setLogo(null)}
-                  className="text-red-500 text-sm"
-                >
-                  Remove Logo
-                </button>
-              </div>
-            ) : (
-              <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-zinc-700 rounded-md cursor-pointer hover:border-indigo-500 transition">
-                <FontAwesomeIcon icon={faCloudArrowUp} />
-                <p className="text-gray-400 text-sm">
-                  Drag and drop your file here or{" "}
-                  <span className="text-indigo-500">browse</span>
-                </p>
-                <input
-                  type="file"
-                  className="hidden"
-                  onChange={handleLogoChange}
                 />
               </label>
             )}
