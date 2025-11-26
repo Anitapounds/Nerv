@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { faCloudArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/navigation";
 import {
@@ -425,14 +426,13 @@ export default function RegisterGamePage() {
               </div>
             ) : (
               <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-zinc-700 rounded-md cursor-pointer hover:border-indigo-500 transition">
-                <FontAwesomeIcon icon={faHeart} />
+                <FontAwesomeIcon icon={faCloudArrowUp} />
                 <p className="text-gray-400 text-sm">
                   Drag and drop your file here or{" "}
                   <span className="text-indigo-500">browse</span>
                 </p>
                 <input
                   type="file"
-                  accept="video/*"
                   className="hidden"
                   onChange={handleVideoChange}
                 />
@@ -460,14 +460,13 @@ export default function RegisterGamePage() {
               </div>
             ) : (
               <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-zinc-700 rounded-md cursor-pointer hover:border-indigo-500 transition">
-                <FontAwesomeIcon icon={faHeart} />
+                <FontAwesomeIcon icon={faCloudArrowUp} />
                 <p className="text-gray-400 text-sm">
                   Drag and drop your file here or{" "}
                   <span className="text-indigo-500">browse</span>
                 </p>
                 <input
                   type="file"
-                  accept="image/*"
                   className="hidden"
                   onChange={handleLogoChange}
                 />

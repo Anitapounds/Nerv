@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import Image from "next/image";
 import { Federant } from "next/font/google";
@@ -59,7 +59,9 @@ export default function GamesLeaderboard() {
   return (
     <div className="min-h-screen bg-black text-white p-6 md:p-10">
       {/* Header */}
-      <h1 className={`${federant.className} text-3xl md:text-4xl font-bold pt-20`}>
+      <h1
+        className={`${federant.className} text-3xl md:text-4xl font-bold pt-20`}
+      >
         Games Leaderboard
       </h1>
       <p className="text-white mt-2">
@@ -82,13 +84,13 @@ export default function GamesLeaderboard() {
       </div>
 
       {/* Game Cards */}
-      <div className="mt-8 space-y-6">
+      <div className="mt-8 space-y-3">
         {games.map((game) => (
           <div
             key={game.id}
-            className={`${game.bgColor} rounded-2xl p-4 flex flex-col md:flex-row items-center gap-6`}
+            className={`${game.bgColor} rounded-2xl p-4 flex flex-col md:flex-row items-center gap-4 border border-gray-500`}
           >
-            <div className="relative w-full md:w-48 h-32 rounded-lg overflow-hidden">
+            <div className="relative w-full md:w-70 h-40 rounded-lg overflow-hidden">
               <Image
                 src={game.image}
                 alt={game.title}
@@ -97,14 +99,25 @@ export default function GamesLeaderboard() {
               />
             </div>
             <div className="flex-1">
-              <h2 className={`${federant.className} text-xl font-semibold`}>
-                {game.title}
-              </h2>
+              <div className="flex justify-between items-center mb-2">
+                <h2 className={`${federant.className} text-xl font-semibold`}>
+                  {game.title}
+                </h2>
+                <div
+                  className={`px-2 py-1 rounded-full text-xs ${
+                    game.status === "open"
+                      ? "bg-green-700 text-white"
+                      : "bg-red-700 text-white"
+                  }`}
+                >
+                  {game.status === "open" ? "Open" : "Closed"}
+                </div>
+              </div>
               <p className="text-gray-300 text-sm mt-1">{game.description}</p>
 
               <div className="flex items-center gap-2 mt-3 text-gray-400">
                 <Image
-                  src="/icons/players.svg"
+                  src="/avatar/profile.jpg"
                   alt="players"
                   width={24}
                   height={24}
@@ -113,18 +126,9 @@ export default function GamesLeaderboard() {
               </div>
             </div>
 
-            <div className="flex flex-col items-center gap-3">
-              <div
-                className={`px-2 py-1 rounded-full text-xs ${
-                  game.status === "open"
-                    ? "bg-green-700 text-white"
-                    : "bg-red-700 text-white"
-                }`}
-              >
-                {game.status === "open" ? "Open" : "Closed"}
-              </div>
+            <div className="flex flex-col items-center md:w-60">
               <button
-                className={`${game.buttonColor} text-white px-6 py-2 rounded-lg hover:opacity-80 transition`}
+                className={`${game.buttonColor} text-white px-7 py-1 rounded-lg hover:opacity-80 transition`}
               >
                 {game.status === "open" ? "Join Test" : "Closed"}
               </button>
