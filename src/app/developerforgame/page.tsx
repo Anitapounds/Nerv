@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
+
 import { faCloudArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/navigation";
@@ -91,7 +91,13 @@ export default function RegisterGamePage() {
     const selectedFiles = Array.from(e.target.files || []);
     setFiles(selectedFiles);
   };
+  const isImage = (file: File) => {
+    return file.type.startsWith("image/");
+  };
 
+  const isSecondImage = (file: File) => {
+    return file.type.startsWith("image/");
+  };
   const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) setLogo(file);
@@ -422,7 +428,17 @@ export default function RegisterGamePage() {
                     key={index}
                     className="flex items-center justify-between"
                   >
-                    <span className="text-gray-300 text-sm">{file.name}</span>
+                    {isImage(file) ? (
+                      <img
+                        src={URL.createObjectURL(file)}
+                        alt={file.name}
+                        className="w-20 h-20 object-cover rounded-md"
+                      />
+                    ) : (
+                      <div className="w-20 h-20 flex items-center justify-center bg-zinc-800 rounded-md text-gray-400 text-xs">
+                        {file.type || "FILE"}
+                      </div>
+                    )}
                     <button
                       type="button"
                       className="text-red-500 text-sm"
@@ -456,8 +472,19 @@ export default function RegisterGamePage() {
           <div>
             <label className="block mb-2 text-sm">Game Logo</label>
             {video ? (
-              <div>
-                <span className="text-gray-300 text-sm">{video.name}</span>
+              <div className="flex items-center justify-between">
+                {/* Image Preview if image */}
+                {isSecondImage(video) ? (
+                  <img
+                    src={URL.createObjectURL(video)}
+                    alt={video.name}
+                    className="w-20 h-20 object-cover rounded-md"
+                  />
+                ) : (
+                  <div className="w-20 h-20 flex items-center justify-center bg-zinc-800 rounded-md text-gray-400 text-xs">
+                    {video.type || "FILE"}
+                  </div>
+                )}
                 <button
                   type="button"
                   onClick={() => setVideo(null)}
