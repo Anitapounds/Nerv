@@ -159,7 +159,7 @@ export default function RegisterGamePage() {
       return;
     }
 
-    if (!logo || !video) {
+    if (files.length === 0 || !video) {
       showToast("Please upload both logo and game asset", "warning");
       return;
     }
@@ -178,13 +178,13 @@ export default function RegisterGamePage() {
     setUploadProgress(10);
 
     try {
-      // Step 1: Upload logo to Pinata
-      setCurrentStep("Uploading logo to IPFS...");
+      // Step 1: Upload logo to Pinata (using first file from game asset)
+      setCurrentStep("Uploading game asset to IPFS...");
       setUploadProgress(15);
-      const logoUrl = await uploadToPinata(logo);
+      const logoUrl = await uploadToPinata(files[0]);
 
-      // Step 2: Upload video to Pinata
-      setCurrentStep("Uploading video to IPFS...");
+      // Step 2: Upload video to Pinata (game logo)
+      setCurrentStep("Uploading game logo to IPFS...");
       setUploadProgress(30);
       const videoUrl = await uploadToPinata(video);
 
